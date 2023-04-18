@@ -4,6 +4,18 @@
 #include <time.h>
 #include "headers/banque.h"
 
+Client* getClientByNumero(Banque *banque, int numeroClient)
+{
+	Client *client = NULL;
+	for (int i = 0; i < banque->nbClients; i++) {
+		if (banque->clients[i].numero == numeroClient)
+		{
+			client = &(banque->clients[i]);
+		}
+	}
+	return client;
+}
+
 // Méthode pour créer un client dans la banque
 void creerClient(Banque *banque, char *nom, char *prenom)
 {
@@ -31,6 +43,14 @@ void creerClient(Banque *banque, char *nom, char *prenom)
     client.numero = numero;
 
     banque->clients[banque->nbClients++] = client;
+}
+
+// Méthode pour créer un client dans la banque
+void editerClient(Banque *banque, int numeroClient, char *nom, char *prenom)
+{
+	Client *client = getClientByNumero(banque, numeroClient);
+	strcpy(client->nom, nom);
+	strcpy(client->prenom, prenom);
 }
 
 // Méthode pour supprimer un client de la banque
@@ -63,16 +83,4 @@ void afficherClients(Banque *banque)
     for (int i = 0; i < banque->nbClients; i++) {
         afficherClient(&banque->clients[i]);
     }
-}
-
-Client* getClientByNumero(Banque *banque, int numeroClient)
-{
-	Client *client = NULL;
-	for (int i = 0; i < banque->nbClients; i++) {
-		if (banque->clients[i].numero == numeroClient)
-		{
-			client = &(banque->clients[i]);
-		}
-	}
-	return client;
 }

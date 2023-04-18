@@ -18,6 +18,9 @@ typedef struct
 // Méthode pour créer un client dans la banque
 void creerClient(Banque *banque, char *nom, char *prenom);
 
+// Méthode pour créer un client dans la banque
+void editerClient(Banque *banque, int numeroClient, char *nom, char *prenom);
+
 // Méthode pour supprimer un client de la banque
 void supprimerClient(Banque *banque, int numeroClient);
 

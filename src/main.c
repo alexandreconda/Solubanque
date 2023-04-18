@@ -37,9 +37,26 @@ void creerDossier()
 
 void editerDossier()
 {
-	//	                printf("Entrez le numero du client a editer : ");
-	//	                scanf("%d", &numeroClient);
-	//	                editerClient(&maBanque, numeroClient);
+	int numeroClient = 0;
+	char nomClient[50];
+	char prenomClient[50];
+
+	printf("Entrez le numéro du client à éditer : ");
+	scanf("%d", &numeroClient);
+	Client *client = getClientByNumero(&maBanque, numeroClient);
+	if (client)
+	{
+		afficherClient(client);
+		printf("Entrez le nouveau nom du client : ");
+		scanf("%s", nomClient);
+		printf("Entrez le nouveau prénom du client : ");
+		scanf("%s", prenomClient);
+		editerClient(&maBanque, numeroClient, nomClient, prenomClient);
+	}
+	else
+	{
+		printf("Le client n°%d n'a pas été trouvé\n", numeroClient);
+	}
 }
 
 void supprimerDossier()
