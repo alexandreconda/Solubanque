@@ -17,4 +17,10 @@ typedef struct
 
 void afficherCompte(Compte *compte);
 
+void crediter(Compte *compte, int montant);
+
+void debiter(Compte *compte, int montant);
+
+void virer(Compte *compteCrediteur, Compte *compteDebiteur, int montant);
+
 #endif /* MODELE_HEADERS_COMPTE_H_ */

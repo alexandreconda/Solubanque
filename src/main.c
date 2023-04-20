@@ -9,10 +9,31 @@
 
 Banque maBanque;
 
+void terminal_crediter(Compte *compte)
+{
+	int montant = 0;
+	printf("Entrez le montant à créditer : ");
+	scanf("%d", &montant);
+	crediter(compte, montant);
+}
+
+void terminal_debiter(Compte *compte)
+{
+	int montant = 0;
+	printf("Entrez le montant à débiter : ");
+	scanf("%d", &montant);
+	debiter(compte, montant);
+}
+
+void terminal_virer(Compte *compte)
+{
+
+}
+
 void terminal_ouvrirCompte(Client *client)
 {
 	char nomCompte[50];
-	printf("Entrez le nom du compte a créer : ");
+	printf("Entrez le nom du compte à créer : ");
 	scanf("%s", nomCompte);
 	ouvrirCompte(client, nomCompte);
 }
@@ -20,7 +41,7 @@ void terminal_ouvrirCompte(Client *client)
 void terminal_cloturerCompte(Client *client)
 {
 	int numeroCompte = 0;
-	printf("Entrez le numero du compte a clôturer : ");
+	printf("Entrez le numero du compte à clôturer : ");
 	scanf("%d", &numeroCompte);
 	cloturerCompte(client, numeroCompte);
 }
@@ -33,8 +54,42 @@ void terminal_consulterCompte(Client *client)
 	Compte *compte = getCompteByNumero(client, numeroCompte);
 	if (compte)
 	{
-		afficherCompte(compte);
-		printf("\n\n");
+		int choix = 0;
+
+		do {
+			afficherCompte(compte);
+			printf("\n\n");
+
+			printf("\n=== Menu ===\n");
+			printf("1. Effectuer un dépôt\n");
+			printf("2. Effectuer un retrait\n");
+			printf("3. Effectuer un virement\n");
+			printf("4. Retour\n");
+			printf("Entrez votre choix : ");
+			scanf("%d", &choix);
+
+			switch (choix) {
+				case 1:
+					terminal_crediter(compte);
+					break;
+
+				case 2:
+					terminal_debiter(compte);
+					break;
+
+				case 3:
+					terminal_virer(compte);
+					break;
+
+				case 4:
+					break;
+
+				default:
+					printf("Choix invalide.\n");
+					break;
+			}
+			printf("\n\n");
+		} while (choix != 4);
 	}
 	else
 	{
