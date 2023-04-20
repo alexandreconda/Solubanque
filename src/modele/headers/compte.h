@@ -11,10 +11,10 @@ typedef struct
 {
 	int numero;
 	char nom[50];
-	int solde;
+	float solde;
 //	Transaction transaction[100];
-	int titulaire; // Numéro client du titulaire du compte
 } Compte;
 
+void afficherCompte(Compte *compte);
 
 #endif /* MODELE_HEADERS_COMPTE_H_ */

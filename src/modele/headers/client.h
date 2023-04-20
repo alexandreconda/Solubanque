@@ -12,11 +12,18 @@ typedef struct
 	int numero;
 	char nom[50];
 	char prenom[50];
-//	Compte comptes[10];
-//	int banque; // Numéro de la banque à laquelle est rattaché le client
+	Compte comptes[10];
+	int nbComptes;
 } Client;
 
-// Méthode pour afficher les informations d'un client
+void afficherComptes(Client *client);
+
 void afficherClient(Client *client);
+
+void ouvrirCompte(Client *client, char *nom);
+
+void cloturerCompte(Client *client, int numeroCompte);
+
+Compte* getCompteByNumero(Client *client, int numeroCompte);
 
 #endif /* MODELE_HEADERS_CLIENT_H_ */

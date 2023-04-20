@@ -9,22 +9,40 @@
 
 Banque maBanque;
 
-void ouvrirCompte()
+void terminal_ouvrirCompte(Client *client)
 {
-
+	char nomCompte[50];
+	printf("Entrez le nom du compte a créer : ");
+	scanf("%s", nomCompte);
+	ouvrirCompte(client, nomCompte);
 }
 
-void cloturerCompte()
+void terminal_cloturerCompte(Client *client)
 {
-
+	int numeroCompte = 0;
+	printf("Entrez le numero du compte a clôturer : ");
+	scanf("%d", &numeroCompte);
+	cloturerCompte(client, numeroCompte);
 }
 
-void consulterCompte()
+void terminal_consulterCompte(Client *client)
 {
-
+	int numeroCompte = 0;
+	printf("Entrez le numero du compte a consulter : ");
+	scanf("%d", &numeroCompte);
+	Compte *compte = getCompteByNumero(client, numeroCompte);
+	if (compte)
+	{
+		afficherCompte(compte);
+		printf("\n\n");
+	}
+	else
+	{
+		printf("Le compte n°%d n'a pas été trouvé\n", numeroCompte);
+	}
 }
 
-void creerDossier()
+void terminal_creerClient()
 {
 	char nomClient[50];
 	char prenomClient[50];
@@ -35,7 +53,7 @@ void creerDossier()
 	creerClient(&maBanque, nomClient, prenomClient);
 }
 
-void editerDossier()
+void terminal_editerClient()
 {
 	int numeroClient = 0;
 	char nomClient[50];
@@ -59,7 +77,7 @@ void editerDossier()
 	}
 }
 
-void supprimerDossier()
+void terminal_supprimerClient()
 {
 	int numeroClient = 0;
 	printf("Entrez le numero du client a supprimer : ");
@@ -67,7 +85,7 @@ void supprimerDossier()
 	supprimerClient(&maBanque, numeroClient);
 }
 
-void consulterDossier()
+void terminal_consulterClient()
 {
 	int numeroClient = 0;
 	printf("Entrez le numero du client a consulter : ");
@@ -75,11 +93,11 @@ void consulterDossier()
 	Client *client = getClientByNumero(&maBanque, numeroClient);
 	if (client)
 	{
-		afficherClient(client);
 		int choix = 0;
 
 		do {
-
+			afficherClient(client);
+			afficherComptes(client);
 				printf("\n=== Menu ===\n");
 				printf("1. Ouvrir un compte\n");
 				printf("2. Clotûrer un compte\n");
@@ -90,15 +108,15 @@ void consulterDossier()
 
 				switch (choix) {
 					case 1:
-						ouvrirCompte();
+						terminal_ouvrirCompte(client);
 						break;
 
 					case 2:
-						cloturerCompte();
+						terminal_cloturerCompte(client);
 						break;
 
 					case 3:
-						consulterCompte();
+						terminal_consulterCompte(client);
 						break;
 
 					case 4:
@@ -145,19 +163,19 @@ int main(void)
 
 	        switch (choix) {
 	            case 1:
-	            	creerDossier();
+	            	terminal_creerClient();
 	                break;
 
 	            case 2:
-	            	editerDossier();
+	            	terminal_editerClient();
 	                break;
 
 	            case 3:
-	                supprimerDossier();
+	            	terminal_supprimerClient();
 	                break;
 
 	            case 4:
-	                consulterDossier();
+	            	terminal_consulterClient();
 	                break;
 
 	            case 5:

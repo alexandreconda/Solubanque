@@ -15,16 +15,12 @@ typedef struct
 	int nbClients;
 } Banque;
 
-// Méthode pour créer un client dans la banque
 void creerClient(Banque *banque, char *nom, char *prenom);
 
-// Méthode pour créer un client dans la banque
 void editerClient(Banque *banque, int numeroClient, char *nom, char *prenom);
 
-// Méthode pour supprimer un client de la banque
 void supprimerClient(Banque *banque, int numeroClient);
 
-// Méthode pour afficher l'ensemble des clients de la banque
 void afficherClients(Banque *banque);
 
 Client* getClientByNumero(Banque *banque, int numeroClient);

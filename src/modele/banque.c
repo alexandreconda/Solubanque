@@ -16,12 +16,12 @@ Client* getClientByNumero(Banque *banque, int numeroClient)
 	return client;
 }
 
-// Méthode pour créer un client dans la banque
 void creerClient(Banque *banque, char *nom, char *prenom)
 {
     Client client;
     strcpy(client.nom, nom);
     strcpy(client.prenom, prenom);
+    client.nbComptes = 0;
 
     // Génération d'un identifiant unique
     int numero;
@@ -45,7 +45,6 @@ void creerClient(Banque *banque, char *nom, char *prenom)
     banque->clients[banque->nbClients++] = client;
 }
 
-// Méthode pour créer un client dans la banque
 void editerClient(Banque *banque, int numeroClient, char *nom, char *prenom)
 {
 	Client *client = getClientByNumero(banque, numeroClient);
@@ -53,7 +52,6 @@ void editerClient(Banque *banque, int numeroClient, char *nom, char *prenom)
 	strcpy(client->prenom, prenom);
 }
 
-// Méthode pour supprimer un client de la banque
 void supprimerClient(Banque *banque, int numeroClient)
 {
     int i;
@@ -76,7 +74,6 @@ void supprimerClient(Banque *banque, int numeroClient)
     }
 }
 
-// Méthode pour afficher l'ensemble des clients de la banque
 void afficherClients(Banque *banque)
 {
     printf("Liste des clients : \n");
