@@ -9,18 +9,19 @@
 
 typedef struct
 {
-	int numero;
+	char identifiant[65];
 	char nom[50];
-	float solde;
+	double solde;
+	char identifiantClient[65];
 //	Transaction transaction[100];
 } Compte;
 
 void afficherCompte(Compte *compte);
 
-void crediter(Compte *compte, int montant);
+void crediter(Compte *compte, double montant);
 
-void debiter(Compte *compte, int montant);
+void debiter(Compte *compte, double montant);
 
-void virer(Compte *compteCrediteur, Compte *compteDebiteur, int montant);
+void virer(Compte *compteCrediteur, Compte *compteDebiteur, double montant);
 
 #endif /* MODELE_HEADERS_COMPTE_H_ */

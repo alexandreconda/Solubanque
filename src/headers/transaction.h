@@ -7,11 +7,11 @@
 
 typedef struct
 {
-	int numero;
+	char identifiant[65];
 	int montant;
 	char libelle[100];
-	int crediteur; // Numéro client du créditeur éventuel
-	int debiteur; // Numéro client du débiteur éventuel
+	char crediteur[65]; // Numéro client du créditeur éventuel
+	char debiteur[65]; // Numéro client du débiteur éventuel
 } Transaction;
 
 #endif /* MODELE_HEADERS_TRANSACTION_H_ */

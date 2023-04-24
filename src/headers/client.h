@@ -9,21 +9,20 @@
 
 typedef struct
 {
-	int numero;
+	char identifiant[65];
 	char nom[50];
 	char prenom[50];
 	Compte comptes[10];
 	int nbComptes;
+	char identifiantBanque[65];
 } Client;
 
 void afficherComptes(Client *client);
 
 void afficherClient(Client *client);
 
-void ouvrirCompte(Client *client, char *nom);
+Compte* ouvrirCompte(Client *client, char *nom);
 
-void cloturerCompte(Client *client, int numeroCompte);
-
-Compte* getCompteByNumero(Client *client, int numeroCompte);
+void cloturerCompte(Client *client, char *numeroCompte);
 
 #endif /* MODELE_HEADERS_CLIENT_H_ */
