@@ -17,6 +17,8 @@ typedef struct
 	char identifiantBanque[65];
 } Client;
 
+void enregistrerClient(Client *client);
+
 void afficherComptes(Client *client);
 
 void afficherClient(Client *client);

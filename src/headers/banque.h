@@ -27,5 +27,7 @@ Client* getClientByIdentifiant(Banque *banque, char *identifiantClient);
 
 Compte* getCompteByIdentifiant(Banque *banque, char *identifiantCompte);
 
+void enregistrerBanque(Banque *banque);
+
 
 #endif /* MODELE_HEADERS_BANQUE_H_ */

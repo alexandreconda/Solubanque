@@ -16,6 +16,8 @@ typedef struct
 //	Transaction transaction[100];
 } Compte;
 
+void enregistrerCompte(Compte *compte);
+
 void afficherCompte(Compte *compte);
 
 void crediter(Compte *compte, double montant);

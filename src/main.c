@@ -2,11 +2,8 @@
  * main.c
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 #include "headers/banque.h"
+#include "headers/tools.h"
 
 Banque maBanque;
 
@@ -28,10 +25,10 @@ void terminal_debiter(Compte *compte)
 
 void terminal_virer(Compte *compte)
 {
-	char identifiantCompteDebiteur = 0;
+	char identifiantCompteDebiteur[65];
 	printf("Entrez le numéro du compte destinataire : ");
-	scanf("%s", &identifiantCompteDebiteur);
-	Compte *compteDebiteur = getCompteByIdentifiant(&maBanque, &identifiantCompteDebiteur);
+	scanf("%65s", identifiantCompteDebiteur);
+	Compte *compteDebiteur = getCompteByIdentifiant(&maBanque, identifiantCompteDebiteur);
 	if (compteDebiteur)
 	{
 		double montant = 0;
@@ -41,7 +38,7 @@ void terminal_virer(Compte *compte)
 	}
 	else
 	{
-		printf("Le compte n°%s n'a pas été trouvé\n", &identifiantCompteDebiteur);
+		printf("Le compte n°%s n'a pas été trouvé\n", identifiantCompteDebiteur);
 	}
 }
 
@@ -55,18 +52,18 @@ void terminal_ouvrirCompte(Client *client)
 
 void terminal_cloturerCompte(Client *client)
 {
-	char identifiantCompte = 0;
+	char identifiantCompte[65];
 	printf("Entrez l'identifiant du compte à clôturer : ");
-	scanf("%s", &identifiantCompte);
-	cloturerCompte(client, &identifiantCompte);
+	scanf("%65s", identifiantCompte);
+	cloturerCompte(client, identifiantCompte);
 }
 
 void terminal_consulterCompte(Client *client)
 {
-	char identifiantCompte = 0;
+	char identifiantCompte[65];
 	printf("Entrez l'identifiant du compte a consulter : ");
-	scanf("%s", &identifiantCompte);
-	Compte *compte = getCompteByIdentifiant(&maBanque, &identifiantCompte);
+	scanf("%s", identifiantCompte);
+	Compte *compte = getCompteByIdentifiant(&maBanque, identifiantCompte);
 	if (compte)
 	{
 		int choix = 0;
@@ -109,7 +106,7 @@ void terminal_consulterCompte(Client *client)
 	}
 	else
 	{
-		printf("Le compte n°%s n'a pas été trouvé\n", &identifiantCompte);
+		printf("Le compte n°%s n'a pas été trouvé\n", identifiantCompte);
 	}
 }
 
@@ -126,13 +123,13 @@ void terminal_creerClient()
 
 void terminal_editerClient()
 {
-	char identifiantClient = 0;
+	char identifiantClient[65];
 	char nomClient[50];
 	char prenomClient[50];
 
 	printf("Entrez le numéro du client à éditer : ");
-	scanf("%s", &identifiantClient);
-	Client *client = getClientByIdentifiant(&maBanque, &identifiantClient);
+	scanf("%65s", identifiantClient);
+	Client *client = getClientByIdentifiant(&maBanque, identifiantClient);
 	if (client)
 	{
 		afficherClient(client);
@@ -140,28 +137,28 @@ void terminal_editerClient()
 		scanf("%s", nomClient);
 		printf("Entrez le nouveau prénom du client : ");
 		scanf("%s", prenomClient);
-		editerClient(&maBanque, &identifiantClient, nomClient, prenomClient);
+		editerClient(&maBanque, identifiantClient, nomClient, prenomClient);
 	}
 	else
 	{
-		printf("Le client n°%s n'a pas été trouvé\n", &identifiantClient);
+		printf("Le client n°%s n'a pas été trouvé\n", identifiantClient);
 	}
 }
 
 void terminal_supprimerClient()
 {
-	char identifiantClient = 0;
+	char identifiantClient[65];
 	printf("Entrez l'identifiant du client a supprimer : ");
-	scanf("%s", &identifiantClient);
-	supprimerClient(&maBanque, &identifiantClient);
+	scanf("%65s", identifiantClient);
+	supprimerClient(&maBanque, identifiantClient);
 }
 
 void terminal_consulterClient()
 {
-	char identifiantClient = 0;
+	char identifiantClient[65];
 	printf("Entrez l'identifiant du client a consulter : ");
-	scanf("%s", &identifiantClient);
-	Client *client = getClientByIdentifiant(&maBanque, &identifiantClient);
+	scanf("%65s", identifiantClient);
+	Client *client = getClientByIdentifiant(&maBanque, identifiantClient);
 	if (client)
 	{
 		int choix = 0;
@@ -202,7 +199,7 @@ void terminal_consulterClient()
 	}
 	else
 	{
-		printf("Le client n°%s n'a pas été trouvé\n", &identifiantClient);
+		printf("Le client n°%s n'a pas été trouvé\n", identifiantClient);
 	}
 }
 
@@ -210,25 +207,8 @@ int main(void)
 {
 	srand( time( NULL ));
 
-	strcpy(maBanque.nom, "Solubanque");
-	strcpy(maBanque.identifiant, "1");
-	maBanque.nbClients = 0;
+	initialiserDonnees(&maBanque);
 
-	Client *bernard = creerClient(&maBanque, "Nigon", "Bernard");
-	Client *leval   = creerClient(&maBanque, "Leval", "Charles");
-	Client *durand  = creerClient(&maBanque, "Durand", "Pierre");
-
-	printf("%p\n%p\n", bernard, &(maBanque.clients[0]));
-	printf("%p\n%p\n", leval, &(maBanque.clients[1]));
-	printf("%p\n%p\n", durand, &(maBanque.clients[2]));
-	ouvrirCompte(bernard, "LivretA");
-
-	ouvrirCompte(leval, "CompteCourant");
-	ouvrirCompte(leval, "LivretA");
-	ouvrirCompte(leval, "AssuranceVie");
-
-	ouvrirCompte(durand, "PEA");
-	ouvrirCompte(durand, "PEL");
 
 	int choix = 0;
 
