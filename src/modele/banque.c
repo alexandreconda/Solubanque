@@ -134,7 +134,8 @@ void supprimerClient(Banque *banque, char *identifiantClient)
 
 void afficherClients(Banque *banque)
 {
-    printf("Liste des clients : \n");
+    printf("CLIENTS : \n\n");
+    printf("%-10s %-50s %-50s\n", "NUMERO", "NOM", "PRENOM");
     for (int i = 0; i < banque->nbClients; i++) {
         afficherClient(&banque->clients[i]);
     }

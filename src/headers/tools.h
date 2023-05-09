@@ -14,6 +14,8 @@
 #ifndef TOOLS_H_
 #define TOOLS_H_
 
+time_t stringToTime(char *timestamp);
+
 void initialiserDonnees(Banque *maBanque);
 
 void enregistrerGenerique(char *nomTable, char *identifiant, char **colNames, char **colValues, size_t nbCols);

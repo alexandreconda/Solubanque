@@ -16,12 +16,13 @@ void enregistrerCompte(Compte *compte)
 
 void afficherCompte(Compte *compte)
 {
-	printf("%-10s %-10s %10.2f€\n", compte->identifiant, compte->nom, compte->solde);
+	printf("%-10s %-50s %-18.2f\n", compte->identifiant, compte->nom, compte->solde);
 }
 
 void afficherTransactions(Compte *compte)
 {
-	printf("Liste des transactions : \n");
+	printf("TRANSACTIONS : \n");
+	printf("%-10s %-30s %-50s %-20s %-10s %-10s\n", "NUMERO", "DATE", "LIBELLE", "MONTANT", "DEBITEUR", "CREDITEUR");
 	for (int i = 0; i < compte->nbTransactions; i++) {
 		afficherTransaction(&compte->transactions[i]);
 	}
@@ -29,13 +30,14 @@ void afficherTransactions(Compte *compte)
 
 Transaction* creerTransaction(char *libelle, double montant, Compte *debiteur, Compte *crediteur)
 {
-	toolsLog("Début creerTransaction");
 	Transaction transaction;
 	strcpy(transaction.libelle, libelle);
+	time_t currentTime;
+	transaction.dateOperation = time(&currentTime);
 	transaction.montant = montant;
-	toolsLog("Test");
 	strcpy(transaction.identifiantDebiteur, debiteur ? debiteur->identifiant : "0");
 	strcpy(transaction.identifiantCrediteur, crediteur ? crediteur->identifiant : "0");
+
 	// Génération d'un identifiant unique
 	genererIdentifiantUnique(transaction.identifiant);
 

@@ -5,6 +5,20 @@
 #include <unistd.h>
 #include "headers/tools.h"
 
+time_t stringToTime(char *timestamp)
+{
+	struct tm tmdate = {0};
+	tmdate.tm_year = atoi(&timestamp[0]) - 1900;
+	tmdate.tm_mon = atoi(&timestamp[5]) - 1;
+	tmdate.tm_mday = atoi(&timestamp[8]);
+	tmdate.tm_hour = atoi(&timestamp[11]);
+	tmdate.tm_min = atoi(&timestamp[14]);
+	tmdate.tm_sec = atoi(&timestamp[17]);
+	time_t t = mktime( &tmdate ) - timezone;
+
+	return t;
+}
+
 static char *util_cat(char *dest, char *end, const char *str)
 {
     while (dest < end && *str)
@@ -28,7 +42,6 @@ size_t join_str(char *out_string, size_t out_bufsz, const char *delim, char **ch
 
 void initialiserDonnees(Banque *maBanque)
 {
-	toolsLog("Début initialiserDonnees");
 	// Ouvrir une connexion à la base de données
 	PGconn *conn = PQconnectdb("user=user password=user dbname=solubanque host=localhost port=5432");
 	if (PQstatus(conn) != CONNECTION_OK)
@@ -43,7 +56,7 @@ void initialiserDonnees(Banque *maBanque)
 	PGresult *res_banque = PQexec(conn, "SELECT identifiant, nom FROM public.banque WHERE identifiant = '1'");
 
 	// Exécuter une requête SQL pour récupérer les données de la table Client
-	PGresult *res_clients = PQexec(conn, "SELECT identifiant, nom, prenom, identifiantbanque FROM public.client WHERE identifiantbanque = '1'");
+	PGresult *res_clients = PQexec(conn, "SELECT identifiant, nom, prenom, identifiantbanque FROM public.client WHERE identifiantbanque = '1' ORDER BY nom, prenom");
 	int nbClients = PQntuples(res_clients);
 
 	// Parcourir le résultat de la requête et stocker les données dans la variable maBanque
@@ -63,7 +76,7 @@ void initialiserDonnees(Banque *maBanque)
 		strcpy(client.identifiantBanque, PQgetvalue(res_clients, i, 3));
 
 		// Exécuter une requête SQL pour récupérer les données de la table Compte
-		snprintf(query, MAX_QUERY_SIZE, "SELECT identifiant, nom, solde, identifiantclient FROM public.compte WHERE identifiantclient = '%s'", client.identifiant);
+		snprintf(query, MAX_QUERY_SIZE, "SELECT identifiant, nom, solde, identifiantclient FROM public.compte WHERE identifiantclient = '%s' ORDER BY nom", client.identifiant);
 		PGresult *res_comptes = PQexec(conn, query);
 		int nbComptes = PQntuples(res_comptes);
 
@@ -84,7 +97,7 @@ void initialiserDonnees(Banque *maBanque)
 
 
 			// Exécuter une requête SQL pour récupérer les données de la table Transaction
-			snprintf(query, MAX_QUERY_SIZE, "SELECT identifiant, libelle, montant, identifiantcrediteur, identifiantdebiteur FROM public.transaction WHERE identifiantcrediteur = '%s' OR identifiantdebiteur = '%s'", compte.identifiant, compte.identifiant);
+			snprintf(query, MAX_QUERY_SIZE, "SELECT identifiant, libelle, dateoperation, montant, identifiantcrediteur, identifiantdebiteur FROM public.transaction WHERE identifiantcrediteur = '%s' OR identifiantdebiteur = '%s' ORDER BY dateoperation", compte.identifiant, compte.identifiant);
 			PGresult *res_transactions = PQexec(conn, query);
 			int nbTransactions = PQntuples(res_transactions);
 
@@ -100,9 +113,10 @@ void initialiserDonnees(Banque *maBanque)
 				Transaction transaction;
 				strcpy(transaction.identifiant, PQgetvalue(res_transactions, k, 0));
 				strcpy(transaction.libelle, PQgetvalue(res_transactions, k, 1));
-				transaction.montant = atoi(PQgetvalue(res_transactions, k, 2));
-				strcpy(transaction.identifiantCrediteur, PQgetvalue(res_transactions, k, 3));
-				strcpy(transaction.identifiantDebiteur, PQgetvalue(res_transactions, k, 4));
+				transaction.dateOperation = stringToTime((PQgetvalue(res_transactions, k, 2)));
+				transaction.montant = atoi(PQgetvalue(res_transactions, k, 3));
+				strcpy(transaction.identifiantCrediteur, PQgetvalue(res_transactions, k, 4));
+				strcpy(transaction.identifiantDebiteur, PQgetvalue(res_transactions, k, 5));
 				maBanque->clients[i].comptes[j].transactions[k] = transaction;
 
 
@@ -126,9 +140,6 @@ void enregistrerGenerique(char *nomTable, char *identifiant, char **colNames, ch
 		PQfinish(conn);
 		exit(1);
 	}
-
-	toolsLog(nomTable);
-	toolsLog(identifiant);
 
 	// Chercher l'élément dans la base de données
 	snprintf(query, MAX_QUERY_SIZE, "SELECT COUNT(*) FROM %s WHERE identifiant='%s'", nomTable, identifiant);

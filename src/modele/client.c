@@ -14,7 +14,8 @@ void enregistrerClient(Client *client)
 
 void afficherComptes(Client *client)
 {
-	printf("Liste des comptes : \n");
+	printf("COMPTES: \n");
+	printf("%-10s %-50s %-20s\n", "NUMERO", "NOM", "SOLDE");
 	for (int i = 0; i < client->nbComptes; i++) {
 		afficherCompte(&client->comptes[i]);
 	}
@@ -22,7 +23,7 @@ void afficherComptes(Client *client)
 
 void afficherClient(Client *client)
 {
-	printf("%-10s %-10s %-10s\n", client->identifiant, client->nom, client->prenom);
+	printf("%-10s %-50s %-50s\n", client->identifiant, client->nom, client->prenom);
 }
 
 Compte* ouvrirCompte(Client *client, char *nom)

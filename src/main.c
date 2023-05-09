@@ -7,6 +7,11 @@
 
 Banque maBanque;
 
+static void afficherTraitSeparation()
+{
+	printf("-------------------------\n");
+}
+
 void terminal_crediter(Compte *compte)
 {
 	double montant = 0;
@@ -42,11 +47,6 @@ void terminal_virer(Compte *compte)
 	}
 }
 
-void terminal_historiqueTransactions(Compte *compte)
-{
-	afficherTransactions(compte);
-}
-
 void terminal_ouvrirCompte(Client *client)
 {
 	char nomCompte[50];
@@ -74,16 +74,17 @@ void terminal_consulterCompte(Client *client)
 		int choix = 0;
 
 		do {
-			afficherClient(client);
+			afficherTraitSeparation();
 			afficherCompte(compte);
+			afficherTraitSeparation();
+			afficherTransactions(compte);
 			printf("\n\n");
 
 			printf("\n=== Menu ===\n");
 			printf("1. Effectuer un dépôt\n");
 			printf("2. Effectuer un retrait\n");
 			printf("3. Effectuer un virement\n");
-			printf("4. Afficher l'historique des transactions\n");
-			printf("5. Retour\n");
+			printf("4. Retour\n");
 			printf("Entrez votre choix : ");
 			scanf("%d", &choix);
 
@@ -101,16 +102,13 @@ void terminal_consulterCompte(Client *client)
 					break;
 
 				case 4:
-					terminal_historiqueTransactions(compte);
-					break;
-				case 5:
 					break;
 				default:
 					printf("Choix invalide.\n");
 					break;
 			}
 			printf("\n\n");
-		} while (choix != 5);
+		} while (choix != 4);
 	}
 	else
 	{
@@ -172,7 +170,9 @@ void terminal_consulterClient()
 		int choix = 0;
 
 		do {
+			afficherTraitSeparation();
 			afficherClient(client);
+			afficherTraitSeparation();
 			afficherComptes(client);
 				printf("\n=== Menu ===\n");
 				printf("1. Ouvrir un compte\n");
@@ -214,15 +214,15 @@ void terminal_consulterClient()
 int main(void)
 {
 	srand( time( NULL ));
-	toolsLog("main1");
 	initialiserDonnees(&maBanque);
-	toolsLog("main2");
 
 
 	int choix = 0;
 
 	do {
-			printf("%s (Banque n°%s) :\n\n-------------------------\n\n", maBanque.nom, maBanque.identifiant);
+			afficherTraitSeparation();
+			printf("%s (Banque n°%s)\n", maBanque.nom, maBanque.identifiant);
+			afficherTraitSeparation();
 			afficherClients(&maBanque);
 
 	        printf("\n=== Menu ===\n");
