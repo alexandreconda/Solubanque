@@ -8,10 +8,15 @@
 typedef struct
 {
 	char identifiant[65];
-	int montant;
-	char libelle[100];
-	char crediteur[65]; // Numéro client du créditeur éventuel
-	char debiteur[65]; // Numéro client du débiteur éventuel
+	char libelle[10];
+	double montant;
+////	time_t dateOperation;
+	char identifiantCrediteur[65]; // Numéro compte du créditeur éventuel
+	char identifiantDebiteur[65]; // Numéro compte du débiteur éventuel
 } Transaction;
+
+void enregistrerTransaction(Transaction *transaction);
+
+void afficherTransaction(Transaction *transaction);
 
 #endif /* MODELE_HEADERS_TRANSACTION_H_ */

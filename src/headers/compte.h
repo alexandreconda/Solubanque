@@ -13,12 +13,15 @@ typedef struct
 	char nom[50];
 	double solde;
 	char identifiantClient[65];
-//	Transaction transaction[100];
+	Transaction transactions[100];
+	int nbTransactions;
 } Compte;
 
 void enregistrerCompte(Compte *compte);
 
 void afficherCompte(Compte *compte);
+
+void afficherTransactions(Compte *compte);
 
 void crediter(Compte *compte, double montant);
 

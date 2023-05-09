@@ -28,6 +28,7 @@ size_t join_str(char *out_string, size_t out_bufsz, const char *delim, char **ch
 
 void initialiserDonnees(Banque *maBanque)
 {
+	toolsLog("Début initialiserDonnees");
 	// Ouvrir une connexion à la base de données
 	PGconn *conn = PQconnectdb("user=user password=user dbname=solubanque host=localhost port=5432");
 	if (PQstatus(conn) != CONNECTION_OK)
@@ -80,7 +81,32 @@ void initialiserDonnees(Banque *maBanque)
 			strcpy(compte.nom, PQgetvalue(res_comptes, j, 1));
 			compte.solde = atoi(PQgetvalue(res_comptes, j, 2));
 			strcpy(compte.identifiantClient, PQgetvalue(res_comptes, j, 3));
+
+
+			// Exécuter une requête SQL pour récupérer les données de la table Transaction
+			snprintf(query, MAX_QUERY_SIZE, "SELECT identifiant, libelle, montant, identifiantcrediteur, identifiantdebiteur FROM public.transaction WHERE identifiantcrediteur = '%s' OR identifiantdebiteur = '%s'", compte.identifiant, compte.identifiant);
+			PGresult *res_transactions = PQexec(conn, query);
+			int nbTransactions = PQntuples(res_transactions);
+
+
+			compte.nbTransactions = nbTransactions;
 			maBanque->clients[i].comptes[j] = compte;
+
+
+
+			// Parcourir le résultat de la requête et stocker les données dans la variable maBanque->clients[i]->comptes[j]->transactions
+			for (int k = 0 ; k < nbTransactions ; k++)
+			{
+				Transaction transaction;
+				strcpy(transaction.identifiant, PQgetvalue(res_transactions, k, 0));
+				strcpy(transaction.libelle, PQgetvalue(res_transactions, k, 1));
+				transaction.montant = atoi(PQgetvalue(res_transactions, k, 2));
+				strcpy(transaction.identifiantCrediteur, PQgetvalue(res_transactions, k, 3));
+				strcpy(transaction.identifiantDebiteur, PQgetvalue(res_transactions, k, 4));
+				maBanque->clients[i].comptes[j].transactions[k] = transaction;
+
+
+			}
 		}
 	}
 

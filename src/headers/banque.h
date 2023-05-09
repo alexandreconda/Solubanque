@@ -11,7 +11,7 @@ typedef struct
 {
 	char identifiant[65];
 	char nom[50];
-	Client clients[100];
+	Client clients[10];
 	int nbClients;
 } Banque;
 

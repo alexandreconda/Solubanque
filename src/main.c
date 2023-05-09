@@ -42,6 +42,11 @@ void terminal_virer(Compte *compte)
 	}
 }
 
+void terminal_historiqueTransactions(Compte *compte)
+{
+	afficherTransactions(compte);
+}
+
 void terminal_ouvrirCompte(Client *client)
 {
 	char nomCompte[50];
@@ -77,7 +82,8 @@ void terminal_consulterCompte(Client *client)
 			printf("1. Effectuer un dépôt\n");
 			printf("2. Effectuer un retrait\n");
 			printf("3. Effectuer un virement\n");
-			printf("4. Retour\n");
+			printf("4. Afficher l'historique des transactions\n");
+			printf("5. Retour\n");
 			printf("Entrez votre choix : ");
 			scanf("%d", &choix);
 
@@ -95,14 +101,16 @@ void terminal_consulterCompte(Client *client)
 					break;
 
 				case 4:
+					terminal_historiqueTransactions(compte);
 					break;
-
+				case 5:
+					break;
 				default:
 					printf("Choix invalide.\n");
 					break;
 			}
 			printf("\n\n");
-		} while (choix != 4);
+		} while (choix != 5);
 	}
 	else
 	{
@@ -206,8 +214,9 @@ void terminal_consulterClient()
 int main(void)
 {
 	srand( time( NULL ));
-
+	toolsLog("main1");
 	initialiserDonnees(&maBanque);
+	toolsLog("main2");
 
 
 	int choix = 0;

@@ -16,7 +16,45 @@ void enregistrerCompte(Compte *compte)
 
 void afficherCompte(Compte *compte)
 {
-	printf("%-10s %-10s %-10.2f€\n", compte->identifiant, compte->nom, compte->solde);
+	printf("%-10s %-10s %10.2f€\n", compte->identifiant, compte->nom, compte->solde);
+}
+
+void afficherTransactions(Compte *compte)
+{
+	printf("Liste des transactions : \n");
+	for (int i = 0; i < compte->nbTransactions; i++) {
+		afficherTransaction(&compte->transactions[i]);
+	}
+}
+
+Transaction* creerTransaction(char *libelle, double montant, Compte *debiteur, Compte *crediteur)
+{
+	toolsLog("Début creerTransaction");
+	Transaction transaction;
+	strcpy(transaction.libelle, libelle);
+	transaction.montant = montant;
+	toolsLog("Test");
+	strcpy(transaction.identifiantDebiteur, debiteur ? debiteur->identifiant : "0");
+	strcpy(transaction.identifiantCrediteur, crediteur ? crediteur->identifiant : "0");
+	// Génération d'un identifiant unique
+	genererIdentifiantUnique(transaction.identifiant);
+
+	if (debiteur)
+	{
+		debiteur->transactions[debiteur->nbTransactions] = transaction;
+		debiteur->nbTransactions ++;
+	}
+
+
+	if (crediteur)
+	{
+		crediteur->transactions[crediteur->nbTransactions] = transaction;
+		crediteur->nbTransactions ++;
+	}
+
+	enregistrerTransaction(&(transaction));
+	return debiteur ? &(debiteur->transactions[debiteur->nbTransactions-1]) : &(crediteur->transactions[crediteur->nbTransactions-1]);
+
 }
 
 void crediter(Compte *compte, double montant)
@@ -25,11 +63,13 @@ void crediter(Compte *compte, double montant)
 	{
 		compte->solde += montant;
 		enregistrerCompte(compte);
+		creerTransaction("crédit", montant, compte, NULL);
 	}
 	else
 	{
 		printf("Veuillez entrer un montant strictement positif\n");
 	}
+
 }
 
 void debiter(Compte *compte, double montant)
@@ -41,6 +81,7 @@ void debiter(Compte *compte, double montant)
 		{
 			compte->solde = nouveauSolde;
 			enregistrerCompte(compte);
+			creerTransaction("débit", montant, NULL, compte);
 		}
 		else
 		{
@@ -63,6 +104,7 @@ void virer(Compte *compteCrediteur, Compte *compteDebiteur, double montant)
 			compteDebiteur->solde += montant;
 			enregistrerCompte(compteCrediteur);
 			enregistrerCompte(compteDebiteur);
+			creerTransaction("virement", montant, compteDebiteur, compteCrediteur);
 			printf("Transfert effectué avec succès !\n");
 		}
 		else
